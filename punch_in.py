@@ -29,6 +29,8 @@ try:
         text_inputs.nth(2).fill(os.environ["FORM_MESSAGE"])        
         page.locator('div[role="button"]:has-text("Submit")').click()
         page.wait_for_timeout(3000) 
+
+        page.screenshot(path="result.png")
         
         print("✅ Punch-in submitted successfully via Playwright!")
         browser.close()

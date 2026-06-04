@@ -8,7 +8,7 @@ on:
 
 jobs:
   punch-in:
-    if: github.event.schedule == '30 3 * * 1-6'
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '15 3 * * 1-6'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,6 +29,13 @@ jobs:
           FORM_MESSAGE: ${{ secrets.FORM_MESSAGE }}
           GOOGLE_AUTH_JSON: ${{ secrets.GOOGLE_AUTH_JSON }}
         run: python punch_in.py
+
+      - name: Save screenshot
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: punch-in-screenshot
+          path: result.png
 
   punch-out:
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '00 12 * * 1-6'
