@@ -1,4 +1,3 @@
-```yaml
 name: Auto Attendance
 
 on:
@@ -53,4 +52,3 @@ jobs:
           GOOGLE_AUTH_JSON: ${{ secrets.GOOGLE_AUTH_JSON }}
         run: python punch_out.py
 
-```
