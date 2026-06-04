@@ -2,9 +2,9 @@ name: Auto Attendance
 
 on:
   schedule:
-    - cron: '30 3 * * 1-6'    # 9:00 AM IST  (UTC is IST - 5:30, so 3:30 UTC)
-    - cron: '30 12 * * 1-6'   # 6:00 PM IST  (12:30 UTC)
-  workflow_dispatch:            # manual trigger from GitHub UI
+    - cron: '30 3 * * 1-6' 
+    - cron: '30 12 * * 1-6'
+  workflow_dispatch: 
 
 jobs:
   punch-in:
@@ -17,29 +17,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - run: pip install requests
+      # Install Playwright and its dependencies
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
 
       - name: Submit punch-in
         env:
           FORM_NAME:    ${{ secrets.FORM_NAME }}
           FORM_TOKEN:   ${{ secrets.FORM_TOKEN }}
           FORM_MESSAGE: ${{ secrets.FORM_MESSAGE }}
+          GOOGLE_AUTH_JSON: ${{ secrets.GOOGLE_AUTH_JSON }}
         run: python punch_in.py
-
-  punch-out:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 12 * * 1-6'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - run: pip install requests
-
-      - name: Submit punch-out
-        env:
-          FORM_NAME:  ${{ secrets.FORM_NAME }}
-          FORM_TOKEN: ${{ secrets.FORM_TOKEN }}
-        run: python punch_out.py
