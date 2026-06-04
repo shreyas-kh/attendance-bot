@@ -1,9 +1,10 @@
+```yaml
 name: Auto Attendance
 
 on:
   schedule:
-    - cron: '30 3 * * 1-6' 
-    - cron: '30 12 * * 1-6'
+    - cron: '30 3 * * 1-6'    # 9:00 AM IST
+    - cron: '30 12 * * 1-6'   # 6:00 PM IST
   workflow_dispatch: 
 
 jobs:
@@ -17,7 +18,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Install Playwright and its dependencies
       - name: Install dependencies
         run: |
           pip install playwright
@@ -30,3 +30,27 @@ jobs:
           FORM_MESSAGE: ${{ secrets.FORM_MESSAGE }}
           GOOGLE_AUTH_JSON: ${{ secrets.GOOGLE_AUTH_JSON }}
         run: python punch_in.py
+
+  punch-out:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 12 * * 1-6'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Submit punch-out
+        env:
+          FORM_NAME:  ${{ secrets.FORM_NAME }}
+          FORM_TOKEN: ${{ secrets.FORM_TOKEN }}
+          GOOGLE_AUTH_JSON: ${{ secrets.GOOGLE_AUTH_JSON }}
+        run: python punch_out.py
+
+```
