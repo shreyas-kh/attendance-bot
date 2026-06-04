@@ -30,6 +30,8 @@ try:
         page.locator('div[role="button"]:has-text("Submit")').click()
         page.wait_for_timeout(3000) 
         
+        page.screenshot(path="result.png")
+
         print("✅ Punch-out submitted successfully via Playwright!")
         browser.close()
 except Exception as e:

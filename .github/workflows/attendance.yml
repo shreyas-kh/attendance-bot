@@ -52,3 +52,10 @@ jobs:
           GOOGLE_AUTH_JSON: ${{ secrets.GOOGLE_AUTH_JSON }}
         run: python punch_out.py
 
+      - name: Save screenshot
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: punch-out-screenshot
+          path: result.png
+
