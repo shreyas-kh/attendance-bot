@@ -22,10 +22,11 @@ try:
         
         page.locator('div[role="checkbox"]').first.click()
         
-        page.locator('[name="entry.1375000112"]').fill(os.environ["FORM_NAME"])
-        page.locator('[name="entry.1720683654"]').fill(os.environ["FORM_TOKEN"])
-        page.locator('[name="entry.1365288235"]').fill(os.environ["FORM_MESSAGE"])
+        text_inputs = page.locator('input[type="text"], textarea')
         
+        text_inputs.nth(0).fill(os.environ["FORM_NAME"])
+        text_inputs.nth(1).fill(os.environ["FORM_TOKEN"])
+        text_inputs.nth(2).fill(os.environ["FORM_MESSAGE"])        
         page.locator('div[role="button"]:has-text("Submit")').click()
         page.wait_for_timeout(3000) 
         
