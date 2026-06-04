@@ -4,7 +4,7 @@ name: Auto Attendance
 on:
   schedule:
     - cron: '30 3 * * 1-6'    # 9:00 AM IST
-    - cron: '30 12 * * 1-6'   # 6:00 PM IST
+    - cron: '00 12 * * 1-6'   # 6:00 PM IST
   workflow_dispatch: 
 
 jobs:
